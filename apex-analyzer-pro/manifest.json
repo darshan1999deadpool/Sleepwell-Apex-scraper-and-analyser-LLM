@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Apex Analyzer Pro",
+  "version": "1.0.0",
+  "description": "Competitor intelligence workbench: configurable pivot with drill-down, market dashboard, spec matrix, trends, A-vs-B comparison, SQL workspace and local-LLM insights. Works fully offline on your scraped Excel/CSV.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "downloads"
+  ],
+  "host_permissions": [
+    "http://localhost:11434/*",
+    "http://127.0.0.1:11434/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_title": "Open Apex Analyzer Pro",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

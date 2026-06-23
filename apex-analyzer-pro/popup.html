@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Apex Analyzer Pro</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="48x48" href="icon48.png">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===================== TOP BAR ===================== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 100 100" width="34" height="34">
+          <defs>
+            <linearGradient id="apexGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#0053a0"/>
+              <stop offset="60%" stop-color="#00aeef"/>
+              <stop offset="100%" stop-color="#f37024"/>
+            </linearGradient>
+          </defs>
+          <path d="M20,80 L50,25 L80,80" fill="none" stroke="url(#apexGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M38,80 L50,55 L62,80" fill="none" stroke="url(#apexGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+          <circle cx="50" cy="20" r="4" fill="#f37024"/>
+        </svg>
+      </span>
+      <span class="wordmark">APEX ANALYZER <span class="pro">PRO</span></span>
+      <span class="sub">Competitor Intelligence &amp; Pivot Workbench</span>
+    </div>
+    <div class="data-controls">
+      <div class="dataset-stat" id="datasetStat">No dataset loaded</div>
+      <button class="btn" id="loadBtn">Load Data File</button>
+      <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" class="hidden">
+      <button class="btn ghost" id="sheetBtn" title="Pick a different sheet" disabled>Sheet</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <!-- ===================== SIDEBAR ===================== -->
+    <nav class="sidebar">
+      <div class="nav-section">Analyze</div>
+      <button class="nav-btn active" data-pane="overview">Overview<span class="nb-desc">KPIs, brands, product types</span></button>
+      <button class="nav-btn" data-pane="pivot">Pivot Explorer<span class="nb-desc">Build &amp; drill into any view</span></button>
+      <button class="nav-btn" data-pane="matrix">Competitive Matrix<span class="nb-desc">Spec-bucket comparison</span></button>
+      <button class="nav-btn" data-pane="trends">Trends</button>
+      <button class="nav-btn" data-pane="avsb">A vs B Compare</button>
+      <div class="nav-section">Query</div>
+      <button class="nav-btn" data-pane="sql">SQL Workspace</button>
+      <button class="nav-btn" data-pane="ai">AI Insights</button>
+    </nav>
+
+    <!-- ===================== CONTENT ===================== -->
+    <main class="content">
+
+      <!-- ---------- OVERVIEW ---------- -->
+      <section class="pane active" id="pane-overview">
+        <div class="pane-head">
+          <h1>Overview</h1>
+          <p>Headline metrics for the selected snapshot, brand leaderboard, and a per-product-type breakdown that mirrors the workbook Type Master sheet.</p>
+        </div>
+
+        <div class="card" id="overviewControls">
+          <div class="card-head">
+            <div><h2>Snapshot &amp; filters</h2><p>Choose the crawl date and narrow by platform and product type. Defaults to the most recent snapshot, all platforms and types.</p></div>
+            <div class="card-tools">
+              <label class="fld"><span>Snapshot date</span>
+                <select class="select" id="ovSnapshot"></select>
+              </label>
+              <label class="fld"><span>Platform</span>
+                <select class="select" id="ovPlatform"></select>
+              </label>
+              <label class="fld"><span>Product type</span>
+                <select class="select" id="ovType"></select>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="kpiGrid"></div>
+
+        <div class="split-2-3">
+          <div class="card">
+            <div class="card-head">
+              <div><h2>Brand leaderboard</h2><p>Ranked by listing count in the selected snapshot.</p></div>
+            </div>
+            <div class="table-wrap" id="brandTableWrap"><div class="empty">Load a dataset to begin.</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><h2>Average price by brand</h2></div></div>
+            <div class="bars" id="brandBars"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Product type breakdown</h2><p>Models, availability, pricing and quality per product type for the selected snapshot.</p></div>
+            <div class="card-tools"><button class="btn sm" id="exportTypeBtn">Export to Excel</button></div>
+          </div>
+          <div class="table-wrap" id="typeTableWrap"><div class="empty">Load a dataset to begin.</div></div>
+        </div>
+      </section>
+
+      <!-- ---------- PIVOT EXPLORER ---------- -->
+      <section class="pane" id="pane-pivot">
+        <div class="pane-head">
+          <h1>Pivot Explorer</h1>
+          <p>Configure rows, columns, a measure and an aggregation, then click any value cell to drill into the exact underlying listings. Mirrors and extends the workbook pivot view.</p>
+        </div>
+
+        <div class="card">
+          <div class="pivot-config">
+            <label class="fld"><span>Rows - level 1</span><select class="select" id="pvRow1"></select></label>
+            <label class="fld"><span>Rows - level 2</span><select class="select" id="pvRow2"></select></label>
+            <label class="fld"><span>Columns - level 1</span><select class="select" id="pvCol1"></select></label>
+            <label class="fld"><span>Columns - level 2</span><select class="select" id="pvCol2"></select></label>
+            <label class="fld"><span>Value</span><select class="select" id="pvMeasure"></select></label>
+            <label class="fld"><span>Aggregation</span><select class="select" id="pvAgg"></select></label>
+          </div>
+          <div class="pivot-filters" id="pvFilters"></div>
+          <div class="pivot-toolbar">
+            <label class="toggle"><input type="checkbox" id="pvHeatmap" checked> Heatmap</label>
+            <label class="toggle"><input type="checkbox" id="pvSubtotals" checked> Row subtotals</label>
+            <button class="btn sm" id="pvSwap">Swap rows / columns</button>
+            <button class="btn sm" id="pvReset">Reset</button>
+            <button class="btn sm primary" id="pvExport">Export pivot to Excel</button>
+            <span class="dataset-stat" id="pvStat" style="margin-left:auto"></span>
+          </div>
+        </div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div class="pivot-scroll" id="pivotScroll"><div class="empty">Load a dataset to build a pivot.</div></div>
+        </div>
+      </section>
+
+      <!-- ---------- COMPETITIVE MATRIX ---------- -->
+      <section class="pane" id="pane-matrix">
+        <div class="pane-head">
+          <h1>Competitive Matrix</h1>
+          <p>Lock a specification bucket (type, size, thickness, platform, snapshot) and compare every brand's listings side by side against the market average for that exact bucket.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Specification bucket</h2></div>
+            <div class="card-tools"><button class="btn sm primary" id="matrixExport">Export to Excel</button></div>
+          </div>
+          <div class="pivot-config" id="matrixFilters"></div>
+          <div class="chips" id="matrixSummary" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div class="table-wrap" id="matrixTableWrap"><div class="empty">Load a dataset to compare.</div></div>
+        </div>
+      </section>
+
+      <!-- ---------- TRENDS ---------- -->
+      <section class="pane" id="pane-trends">
+        <div class="pane-head">
+          <h1>Trends</h1>
+          <p>Track a measure across crawl dates broken down by any dimension, with first-to-last movement. Then compare two snapshots product by product, matched by product ID.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h2>Measure over time</h2></div>
+            <div class="card-tools">
+              <label class="fld"><span>Break down by</span><select class="select" id="trDim"></select></label>
+              <label class="fld"><span>Measure</span><select class="select" id="trMeasure"></select></label>
+              <label class="fld"><span>Aggregation</span><select class="select" id="trAgg"></select></label>
+            </div>
+          </div>
+          <div class="pivot-filters" id="trFilters" style="margin-top:0; border-top:none; padding-top:0;"></div>
+          <div class="table-wrap" id="trendTableWrap" style="margin-top:14px;"><div class="empty">Load a dataset to view trends.</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><div><h2>Snapshot A vs Snapshot B (matched by product)</h2>
+            <p>Per-product price and rating movement between two crawl dates.</p></div>
+            <div class="card-tools">
+              <label class="fld"><span>Snapshot A</span><select class="select" id="ttDateA"></select></label>
+              <label class="fld"><span>Snapshot B</span><select class="select" id="ttDateB"></select></label>
+              <button class="btn sm" id="ttExport">Export to Excel</button>
+            </div>
+          </div>
+          <div class="table-wrap" id="ttTableWrap"><div class="empty">Select two snapshots.</div></div>
+        </div>
+      </section>
+
+      <!-- ---------- A vs B ---------- -->
+      <section class="pane" id="pane-avsb">
+        <div class="pane-head">
+          <h1>A vs B Compare</h1>
+          <p>Head-to-head metric comparison between two brands for a chosen type, size and snapshot, plus a five-brand competition panel. Mirrors the workbook A vs B sheet.</p>
+        </div>
+
+        <div class="card">
+          <div class="pivot-config">
+            <label class="fld"><span>Competitor A</span><select class="select" id="abBrandA"></select></label>
+            <label class="fld"><span>Competitor B</span><select class="select" id="abBrandB"></select></label>
+            <label class="fld"><span>Product type</span><select class="select" id="abType"></select></label>
+            <label class="fld"><span>Size</span><select class="select" id="abSize"></select></label>
+            <label class="fld"><span>Platform</span><select class="select" id="abPlatform"></select></label>
+            <label class="fld"><span>Thickness (in)</span><select class="select" id="abThickness"></select></label>
+            <label class="fld"><span>Length (in)</span><select class="select" id="abLength"></select></label>
+            <label class="fld"><span>Breadth (in)</span><select class="select" id="abBreadth"></select></label>
+            <label class="fld"><span>Height (in)</span><select class="select" id="abHeight"></select></label>
+            <label class="fld"><span>Snapshot</span><select class="select" id="abDate"></select></label>
+          </div>
+        </div>
+
+        <div class="split-2">
+          <div class="card">
+            <div class="card-head"><div><h2>Head to head</h2></div></div>
+            <div class="table-wrap" id="abTableWrap"><div class="empty">Pick two brands.</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div><h2>Top brands in competition</h2></div></div>
+            <div class="table-wrap" id="abPanelWrap"><div class="empty">Load a dataset.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SQL ---------- -->
+      <section class="pane" id="pane-sql">
+        <div class="pane-head">
+          <h1>SQL Workspace</h1>
+          <p>Run ANSI-style SELECT queries directly against the normalized dataset. Supports WHERE, AND/OR, LIKE, GROUP BY with COUNT/AVG/SUM/MIN/MAX, ORDER BY and LIMIT.</p>
+        </div>
+
+        <div class="card">
+          <div class="sql-grid">
+            <div>
+              <label class="fld" style="margin-bottom:10px;"><span>Sample query</span>
+                <select class="select" id="sqlSamples"></select>
+              </label>
+              <textarea class="sql-editor" id="sqlEditor" spellcheck="false"></textarea>
+              <div class="card-tools" style="margin-top:10px;">
+                <button class="btn primary sm" id="sqlRun">Run query</button>
+                <button class="btn sm" id="sqlExport">Export results to Excel</button>
+                <span class="dataset-stat" id="sqlFeedback">Returned 0 rows</span>
+              </div>
+            </div>
+            <div>
+              <label class="fld"><span>Table schema (FROM ?)</span></label>
+              <ul class="schema-list" id="schemaList"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+          <div class="table-wrap" id="sqlResultWrap"><div class="empty">Run a query to see results.</div></div>
+        </div>
+      </section>
+
+      <!-- ---------- AI ---------- -->
+      <section class="pane" id="pane-ai">
+        <div class="pane-head">
+          <h1>AI Insights</h1>
+          <p>Generates a competitive briefing from the loaded data. Uses a local LLM through Ollama at localhost:11434 when available, otherwise a transparent statistical engine that computes every figure directly from your data.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Cognitive engine</h2><p>Nothing leaves your machine. The local model is optional.</p></div>
+            <div class="card-tools">
+              <label class="fld"><span>Anchor brand</span><select class="select" id="aiAnchor"></select></label>
+              <label class="fld"><span>Ollama model</span><input class="input" id="aiModel" value="llama3" placeholder="llama3, mistral, qwen2.5"></label>
+            </div>
+          </div>
+          <div class="ai-terminal" id="aiTerminal">Apex AI engine ready. Load a dataset, then run the analysis.</div>
+          <div class="progress" id="aiProgress"><div class="pfill" id="aiProgressFill"></div></div>
+          <label class="fld" style="margin-top:12px;"><span>Custom prompt (optional)</span>
+            <textarea class="input" id="aiPrompt" style="min-height:54px;" placeholder="e.g. Where are competitors undercutting Sleepwell on identical specs, and what should we do?"></textarea>
+          </label>
+          <div class="card-tools" style="margin-top:10px;">
+            <button class="btn primary sm" id="aiRun">Run analysis</button>
+          </div>
+          <div class="ai-report hidden" id="aiReport"></div>
+        </div>
+
+        <!-- Alert Center: what is wrong + action items -->
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Alert center</h2><p>Automatic scan for competitive risks against the anchor brand: undercuts, low ratings, stock-outs, competitor price drops and discount gaps.</p></div>
+            <div class="card-tools">
+              <label class="fld"><span>Rating floor</span><input class="input" id="alRatingFloor" type="number" step="0.1" min="0" max="5" value="4.2" style="width:80px;"></label>
+              <label class="fld"><span>Undercut high at %</span><input class="input" id="alUndercut" type="number" step="1" min="1" max="90" value="15" style="width:90px;"></label>
+              <button class="btn sm" id="alRefresh">Refresh alerts</button>
+            </div>
+          </div>
+          <div class="chips" id="alertSummary" style="margin-bottom:12px;"><span class="chip">Load a dataset and run the scan.</span></div>
+          <div id="actionItemsBox"></div>
+          <div class="table-wrap" id="alertTableWrap" style="margin-top:12px;"><div class="empty">No scan run yet.</div></div>
+        </div>
+
+        <!-- Email / notifications -->
+        <div class="card">
+          <div class="card-head">
+            <div><h2>Email &amp; notifications</h2><p>Push the AI report and critical alerts to your team. Use the email client (zero setup) or a webhook endpoint for automated delivery. Settings are saved on this machine.</p></div>
+          </div>
+          <div class="pivot-config">
+            <label class="fld" style="grid-column: span 2;"><span>Recipients (comma separated)</span><input class="input" id="emailTo" placeholder="sales@example.com, director@example.com"></label>
+            <label class="fld"><span>Delivery channel</span>
+              <select class="select" id="emailChannel">
+                <option value="mailto">Email client (mailto)</option>
+                <option value="webhook">Webhook (POST JSON)</option>
+              </select>
+            </label>
+            <label class="fld" style="grid-column: span 3;"><span>Webhook URL (for automated delivery via Zapier / Make / Apps Script / SMTP relay)</span><input class="input" id="emailWebhook" placeholder="https://hooks.example.com/apex"></label>
+          </div>
+          <div class="card-tools" style="margin-top:12px;">
+            <button class="btn primary sm" id="sendReportBtn">Send AI report</button>
+            <button class="btn sm" id="sendAlertsBtn">Send critical alerts &amp; action items</button>
+            <button class="btn sm" id="saveNotifyBtn">Save settings</button>
+            <span class="dataset-stat" id="notifyStatus" style="margin-left:auto"></span>
+          </div>
+          <div class="ai-terminal" id="notifyLog" style="height:110px; margin-top:12px;">Notification log is empty.</div>
+          <p class="hint">Webhook payload: <code>{ to, subject, html, text, alerts, actionItems, generatedAt }</code>. The endpoint can forward it to email. The mailto channel opens your mail client with a pre-filled plain-text digest.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===================== DRILL-DOWN DRAWER ===================== -->
+<div class="drawer-mask" id="drawerMask"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <h3 id="drawerTitle">Drill-down</h3>
+      <div class="dh-sub" id="drawerSub"></div>
+    </div>
+    <div class="card-tools">
+      <button class="btn sm" id="drawerExport">Export rows</button>
+      <button class="btn sm" id="drawerClose">Close</button>
+    </div>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+
+<script src="xlsx.mini.min.js"></script>
+<script src="engine.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
