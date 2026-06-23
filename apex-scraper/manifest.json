@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Apex Scraper",
+  "version": "6.0.0",
+  "description": "Universal marketplace product crawler (Amazon, Flipkart and any store worldwide). Two-tier engine: fast fetch parsing + live-tab rescue. Zero fabricated data — failures are reported honestly.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "downloads",
+    "offscreen",
+    "alarms",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_title": "Open Apex Scraper",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

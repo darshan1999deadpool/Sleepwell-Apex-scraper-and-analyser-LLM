@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Apex Scraper</title>
+  <link rel="icon" type="image/png" href="icon16.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Ambient background glows with subtle Sleepwell brand colors -->
+  <div class="ambient-glow blue-glow"></div>
+  <div class="ambient-glow orange-glow"></div>
+  <div class="ambient-glow purple-glow"></div>
+
+  <div class="app-container">
+    <!-- Header Area -->
+    <header class="app-header">
+      <div class="logo-group">
+        <!-- New Vector SVG Logo (Apex Double Peak) -->
+        <div class="brand-emblem">
+          <svg viewBox="0 0 100 100" class="logo-svg">
+            <defs>
+              <linearGradient id="apex-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#0053a0" /> <!-- Royal Blue -->
+                <stop offset="60%" stop-color="#00aeef" /> <!-- Sky Blue -->
+                <stop offset="100%" stop-color="#f37024" /> <!-- Orange -->
+              </linearGradient>
+            </defs>
+            <path d="M20,80 L50,25 L80,80" fill="none" stroke="url(#apex-gradient)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M38,80 L50,55 L62,80" fill="none" stroke="url(#apex-gradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
+            <circle cx="50" cy="20" r="4" fill="#f37024" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Apex Scraper <span>Crawler Deck</span></h1>
+          <p class="tagline">High-Performance E-Commerce Data Scraper</p>
+        </div>
+      </div>
+      <div class="header-badge">
+        <span class="live-indicator"></span>
+        <span id="activeModeText">Active Crawler Engine</span>
+      </div>
+    </header>
+
+    <div class="dashboard-body">
+      <!-- Tabs panel positioned on the left gutter -->
+      <nav class="nav-sidebar">
+        <button class="nav-tab-btn active" data-tab="control-tab">
+          <span class="tab-icon">🔌</span>
+          <span class="tab-title">Control Deck</span>
+          <span class="tab-desc">Crawling Operations</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="sql-tab">
+          <span class="tab-icon">💻</span>
+          <span class="tab-title">SQL Workspace</span>
+          <span class="tab-desc">Relational Queries</span>
+        </button>
+      </nav>
+
+      <!-- Main Contents Frame -->
+      <main class="content-frame">
+        
+        <!-- TAB 1: Control Deck -->
+        <div class="tab-pane active" id="control-tab">
+          <div class="deck-grid">
+            
+            <!-- Operational parameters card -->
+            <section class="glass-card control-controls">
+              <div class="card-header">
+                <h2>🛸 Operations Gutter</h2>
+                <p>Upload a product matrix or test preloaded mattresses</p>
+              </div>
+
+              <!-- Interactive Seed Loaders -->
+              <div class="form-item">
+                <label>Launch Preloaded Test Cases</label>
+                <div class="seed-buttons">
+                  <button type="button" class="btn-seed" id="seedMattressBtn" title="Preload Ortho Mattresses Comparison Sets">🛏️ Seed Mattresses</button>
+                  <button type="button" class="btn-seed" id="seedProtectorBtn" title="Preload Waterproof Mattress Protectors Sets">🛡️ Seed Protectors</button>
+                  <button type="button" class="btn-seed" id="clearDatabaseBtn" style="border-color: #ff6b6b; background: rgba(255, 107, 107, 0.05); color: #ff6b6b;" title="Wipe local database records">Wipe Scrapes</button>
+                </div>
+              </div>
+
+              <!-- CSV Uploader -->
+              <div class="form-item border-top">
+                <label for="csvFileInput">Upload Product CSV Link Matrix</label>
+                <div class="custom-file-upload">
+                  <button type="button" class="btn-secondary" id="customFileBtn">Select CSV</button>
+                  <input type="file" id="csvFileInput" accept=".csv">
+                  <span id="csvFileName">No file selected (using preloads)</span>
+                </div>
+                <div class="guide-text">
+                  Supports lists of up to 50,000 links. Auto-matches ASIN (Amazon) and FSIN (Flipkart).
+                </div>
+                <div class="csv-template-download">
+                  <button type="button" id="downloadCsvTemplateBtn" class="btn-link">📥 Download CSV Template Format</button>
+                </div>
+              </div>
+
+              <!-- Speed and thread settings -->
+              <div class="form-slider">
+                <div class="slider-info">
+                  <span>Concurrent Crawler Workers</span>
+                  <span id="concurrencyLabel" class="badge-accent">3 Workers</span>
+                </div>
+                <input type="range" id="concurrencyRange" min="1" max="10" value="3">
+              </div>
+
+              <div class="form-slider">
+                <div class="slider-info">
+                  <span>Stagger Interval Staging</span>
+                  <span id="delayLabel" class="badge-accent">1.0s</span>
+                </div>
+                <input type="range" id="delayRange" min="0.1" max="5.0" step="0.1" value="1.0">
+              </div>
+
+              <!-- Engine Action Buttons -->
+              <div class="control-actions">
+                <button id="launchJobBtn" class="btn-primary">⚡ Start Scraper Job</button>
+                <div class="job-active-controls hidden" id="jobControlsWrapper">
+                  <button id="pauseJobBtn" class="btn-warning">⏸️ Pause</button>
+                  <button id="resumeJobBtn" class="btn-success hidden">▶️ Resume</button>
+                  <button id="stopJobBtn" class="btn-danger">⏹️ Stop</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Progress monitor engine card -->
+            <section class="glass-card control-monitor">
+              <div class="card-header">
+                <h2>📈 Live Progress Monitor</h2>
+                <p>Real-time crawler bandwidth metrics</p>
+              </div>
+
+              <div class="metrics-dashboard">
+                <div class="metric-block">
+                  <span class="m-title">Total Links</span>
+                  <span id="metricTotalLinks" class="m-val">0</span>
+                </div>
+                <div class="metric-block">
+                  <span class="m-title">Processed</span>
+                  <span id="metricProcessed" class="m-val">0</span>
+                </div>
+                <div class="metric-block">
+                  <span class="m-title">Engine State</span>
+                  <span id="metricEngineState" class="m-val state-idle">Idle</span>
+                </div>
+                <div class="metric-block">
+                  <span class="m-title">Self-Healed</span>
+                  <span id="metricSelfHealed" class="m-val info-purple">0</span>
+                </div>
+              </div>
+
+              <div class="progress-bar-area">
+                <div class="progress-row">
+                  <span id="progressStatusLabel">Select test database or upload links CSV file...</span>
+                  <span id="progressPercentage">0%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" id="progressFillBar" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <!-- Download Button -->
+              <div class="export-area">
+                <div class="split-exporter-selector">
+                  <label for="splitExporterSelect">Export Split Size Limit: </label>
+                  <select id="splitExporterSelect" class="form-select-sm">
+                    <option value="0">Single Unified File</option>
+                    <option value="5000">Split into 5,000 row parts</option>
+                    <option value="10000">Split into 10,000 row parts</option>
+                    <option value="25000">Split into 25,000 row parts</option>
+                  </select>
+                </div>
+                <button id="downloadScrapedExcelBtn" class="btn-download" disabled>
+                  🏆 Export Scraped Matrix (.xlsx)
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- Real-Time Activity Logger Console -->
+          <section class="glass-card logger-console">
+            <div class="console-header">
+              <h3>💻 Terminal Activity Monitor</h3>
+              <button id="clearLogsBtn" class="btn-clear-logs">Clear Logs</button>
+            </div>
+            <div id="logsTerminalArea" class="terminal-body">
+              <div class="terminal-row info">[System] Apex Scraper initialized. Storage chunk boundary: 50 rows. RAM load: flat.</div>
+            </div>
+          </section>
+        </div>
+
+        <!-- TAB 2: Custom SQL Workspace -->
+        <div class="tab-pane" id="sql-tab">
+          <section class="glass-card sql-editor-card">
+            <div class="card-header">
+              <h2>💻 Relational SQL Workspace</h2>
+              <p>Write highly customizable SQL SELECT queries directly against your scraped dataset.</p>
+            </div>
+
+            <div class="sql-workspace-grid">
+              <div class="sql-input-panel">
+                <div class="form-item">
+                  <label for="sqlQueryDropdown">Select Sample Helper Query</label>
+                  <select id="sqlQueryDropdown" class="form-select">
+                    <option value="SELECT brand, title, price, rating FROM ? WHERE brand = 'Sleepwell'">1. View all Sleepwell products</option>
+                    <option value="SELECT brand, title, price, mrp, discount FROM ? WHERE discount > 20 ORDER BY price ASC">2. View items with discounts > 20% sorted by price</option>
+                    <option value="SELECT platform, COUNT(*) as Count, AVG(price) as AvgPrice, AVG(rating) as AvgRating FROM ? GROUP BY platform">3. Aggregations: Item counts & averages grouped by Platform</option>
+                    <option value="SELECT brand, title, price, wowPrice, (price - wowPrice) as BankSavings FROM ? WHERE price != wowPrice">4. Calculate potential Bank/Wow discounts by model</option>
+                    <option value="SELECT * FROM ? WHERE title LIKE '%Latex%' OR title LIKE '%Foam%'">5. Filter titles containing Latex or Foam materials</option>
+                  </select>
+                </div>
+
+                <div class="form-item">
+                  <label for="sqlConsoleArea">SQL Command Editor (Standard ANSI SQL)</label>
+                  <div class="sql-editor-wrapper">
+                    <textarea id="sqlConsoleArea" class="sql-editor-textarea" spellcheck="false">SELECT brand, title, price, rating FROM ? WHERE brand = 'Sleepwell'</textarea>
+                  </div>
+                </div>
+
+                <div class="sql-actions">
+                  <button type="button" id="executeSqlQueryBtn" class="btn-primary">⚡ Execute Query</button>
+                  <button type="button" id="exportSqlExcelBtn" class="btn-secondary">📥 Export Output to Excel</button>
+                </div>
+              </div>
+
+              <!-- SQL Schema details card -->
+              <div class="sql-schema-panel">
+                <h3>📋 Schema Reference (Table: <code>?</code>)</h3>
+                <div class="schema-scroll-area">
+                  <ul class="schema-list">
+                    <li><code>platform</code> <span class="s-type">TEXT</span> - e.g. Amazon, Flipkart</li>
+                    <li><code>brand</code> <span class="s-type">TEXT</span> - e.g. Sleepwell, Duroflex, Wakefit</li>
+                    <li><code>title</code> <span class="s-type">TEXT</span> - Product listing title</li>
+                    <li><code>price</code> <span class="s-type">NUMBER</span> - Current active selling price</li>
+                    <li><code>mrp</code> <span class="s-type">NUMBER</span> - Maximum Retail Price</li>
+                    <li><code>discount</code> <span class="s-type">NUMBER</span> - Percent off</li>
+                    <li><code>rating</code> <span class="s-type">NUMBER</span> - Average rating stars</li>
+                    <li><code>reviewCount</code> <span class="s-type">NUMBER</span> - Count of customer reviews</li>
+                    <li><code>wowPrice</code> <span class="s-type">NUMBER</span> - Wow deal/Lowest cash price</li>
+                    <li><code>emiPrice</code> <span class="s-type">NUMBER</span> - Starting monthly EMI</li>
+                    <li><code>warranty</code> <span class="s-type">TEXT</span> - e.g. 5 Years, 1 Year</li>
+                    <li><code>returnDays</code> <span class="s-type">NUMBER</span> - Replacements/returns windows</li>
+                    <li><code>deliveryBy</code> <span class="s-type">TEXT</span> - Estimated delivery date</li>
+                    <li><code>fulfilledBy</code> <span class="s-type">TEXT</span> - Merchant name</li>
+                    <li><code>topKeywords</code> <span class="s-type">TEXT</span> - Generated SEO keywords</li>
+                    <li><code>scrapeTime</code> <span class="s-type">TEXT</span> - Scraped date/time stamp</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Query execution results table -->
+          <section class="glass-card sql-results-card">
+            <div class="card-header-actions">
+              <div>
+                <h2>📋 Query Results</h2>
+                <p id="sqlQueryFeedback">Returned 0 rows in 0ms</p>
+              </div>
+            </div>
+
+            <div class="sql-results-table-wrapper">
+              <table class="sql-results-table">
+                <thead id="sqlResultsTableHeader">
+                  <tr>
+                    <th>Results display area. Execute your query to see columns...</th>
+                  </tr>
+                </thead>
+                <tbody id="sqlResultsTableBody">
+                  <tr>
+                    <td class="text-center muted">No active query run. Customize the SQL input area and click Execute.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="xlsx.mini.min.js"></script>
+  <script src="enrich.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
