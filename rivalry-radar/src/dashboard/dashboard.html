@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rivalry Radar — Dashboard</title>
+  <link rel="icon" href="../../icons/icon48.png" />
+  <link rel="stylesheet" href="../lib/theme.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <header class="rr-header" id="rr-header">
+    <div class="rr-brand">
+      <img class="rr-logo" src="../../icons/logo.svg" alt="Rivalry Radar logo" />
+      <div class="rr-brand-text">
+        <h1>Rivalry Radar</h1>
+        <span class="rr-sub">Read-only competitor ad intelligence</span>
+      </div>
+    </div>
+
+    <div class="rr-controls">
+      <span class="rr-status" id="status-pill" data-running="false">
+        <span class="rr-dot"></span><span id="status-text">Stopped</span>
+      </span>
+      <button class="rr-btn rr-btn-primary" id="btn-toggle" type="button">Start</button>
+      <button class="rr-btn" id="btn-scan-now" type="button">Scan now</button>
+      <button class="rr-btn" id="btn-reviews-now" type="button">Reviews now</button>
+
+      <span class="rr-review-chip" id="review-chip" title="Competitor negative-review harvest">
+        <span class="rr-review-chip-icon">★</span>
+        <span class="rr-review-chip-text" id="review-chip-text">Reviews idle</span>
+      </span>
+
+      <label class="rr-field">
+        <span>Marketplace</span>
+        <select id="filter-market">
+          <option value="all">All</option>
+          <option value="amazon">Amazon</option>
+          <option value="flipkart">Flipkart</option>
+        </select>
+      </label>
+
+      <div class="rr-field rr-kwfield">
+        <span>Search terms</span>
+        <div class="rr-kw-control" id="kw-control">
+          <div class="rr-kw-chips" id="kw-chips"></div>
+          <input class="rr-kw-input" id="kw-input" type="text" autocomplete="off"
+                 spellcheck="false" placeholder="Add search term + Enter"
+                 aria-label="Add a search term" />
+        </div>
+        <div class="rr-kw-actions">
+          <button class="rr-btn rr-btn-ghost" id="btn-upload-kw" type="button" title="Upload a CSV/TSV/TXT of keywords">Upload sheet</button>
+          <input type="file" id="kw-file" accept=".csv,.tsv,.txt" hidden />
+        </div>
+        <span class="rr-kw-note" id="kw-note">Scanned on every enabled marketplace (Amazon + Flipkart).</span>
+      </div>
+
+      <label class="rr-field">
+        <span>Range</span>
+        <select id="filter-range">
+          <option value="hour">Last hour</option>
+          <option value="today">Today</option>
+          <option value="all" selected>All</option>
+        </select>
+      </label>
+
+      <button class="rr-btn" id="btn-export" type="button">Export CSV</button>
+      <button class="rr-btn" id="btn-refresh" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <main class="rr-main">
+    <!-- SECTION 1 — LIVE TWIN -->
+    <section class="rr-section" id="sec-twin">
+      <div class="rr-section-head">
+        <h2>Live Twin</h2>
+        <span class="rr-note">Amazon &amp; Flipkart cannot be embedded — this structured render <strong>is</strong> the live view of the latest scan.</span>
+      </div>
+      <div class="rr-twin">
+        <div class="rr-twin-col" id="twin-amazon" data-market="amazon"></div>
+        <div class="rr-twin-col" id="twin-flipkart" data-market="flipkart"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 — ANALYTICS -->
+    <section class="rr-section" id="sec-analytics">
+      <div class="rr-section-head">
+        <h2>Analytics</h2>
+        <div class="rr-seg" id="sov-mode" role="group" aria-label="Share-of-voice mode">
+          <button type="button" data-mode="sponsored" aria-pressed="true">Sponsored</button>
+          <button type="button" data-mode="organic" aria-pressed="false">Organic</button>
+          <button type="button" data-mode="overall" aria-pressed="false">Overall</button>
+        </div>
+        <span class="rr-note" id="analytics-scope"></span>
+      </div>
+
+      <div class="rr-kpis" id="kpis"></div>
+
+      <div class="rr-grid2">
+        <div class="rr-card">
+          <h3>Share of Voice <small id="sov-sub">(sponsored ad slots)</small></h3>
+          <div id="sov"></div>
+        </div>
+        <div class="rr-card">
+          <h3>Placement-count trend</h3>
+          <div id="trend"></div>
+        </div>
+      </div>
+
+      <div class="rr-grid2">
+        <div class="rr-card">
+          <h3>Competitor leaderboard</h3>
+          <div id="leaderboard"></div>
+        </div>
+        <div class="rr-card">
+          <h3>Your-brand visibility</h3>
+          <div id="my-vis"></div>
+        </div>
+      </div>
+
+      <div class="rr-card">
+        <h3>SoV split <small>(organic vs sponsored vs overall, per brand)</small></h3>
+        <div id="sov-split"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 2b — COMPETITIVE ANALYTICS -->
+    <section class="rr-section" id="sec-compete">
+      <div class="rr-section-head">
+        <h2>Competitive analytics</h2>
+        <span class="rr-note" id="compete-scope"></span>
+        <button class="rr-btn" id="btn-export-analytics" type="button">Export analytics CSV</button>
+      </div>
+
+      <div class="rr-card rr-compete-card" id="kw-board-card">
+        <div class="rr-board-head">
+          <h3>Keyword performance — where to run ads <small id="kw-board-sub"></small></h3>
+          <div class="rr-board-controls">
+            <label class="rr-board-sortlabel" for="kw-board-sort">Sort by</label>
+            <select id="kw-board-sort">
+              <option value="you">Your SoV</option>
+              <option value="gap">Gap to leader</option>
+              <option value="opportunity">Opportunity</option>
+              <option value="ads">Competition</option>
+              <option value="pos">Avg position</option>
+              <option value="amazon">Amazon SoV</option>
+              <option value="flipkart">Flipkart SoV</option>
+              <option value="keyword">Keyword A–Z</option>
+            </select>
+            <button class="rr-btn rr-btn-ghost rr-board-dir" id="kw-board-dir" type="button"
+                    title="Toggle ascending / descending" aria-label="Toggle sort direction">↓</button>
+          </div>
+        </div>
+        <div class="rr-board-summary" id="kw-board-summary"></div>
+        <div class="rr-board-scroll rr-scroll" id="kw-board"></div>
+        <div class="rr-board-legend" id="kw-board-legend"></div>
+      </div>
+
+      <div class="rr-card rr-compete-card">
+        <h3>Keyword &times; Brand SoV matrix <small id="matrix-sub">(share of each keyword's sponsored slots)</small></h3>
+        <div id="sov-matrix"></div>
+      </div>
+
+      <div class="rr-card rr-compete-card" id="kw-drill-card">
+        <h3>Keyword drill-down <small id="kw-drill-sub"></small></h3>
+        <div id="kw-drill"></div>
+      </div>
+
+      <div class="rr-grid2">
+        <div class="rr-card rr-compete-card">
+          <h3>Weighted visibility leaderboard <small id="wlb-sub">(ad-position weighted)</small></h3>
+          <div id="weighted-leaderboard"></div>
+        </div>
+        <div class="rr-card rr-compete-card">
+          <h3>Opportunities &amp; threats</h3>
+          <div id="insights"></div>
+        </div>
+      </div>
+
+      <div class="rr-card rr-compete-card">
+        <h3>Hourly per-brand SoV trend <small id="sov-trend-sub">(sponsored slot share by hour)</small></h3>
+        <div class="rr-brandsel" id="brand-selector" role="group" aria-label="Brands to plot"></div>
+        <div id="sov-trend"></div>
+      </div>
+
+      <div class="rr-card rr-compete-card">
+        <h3>Per-keyword competition</h3>
+        <div id="keyword-competition"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 — COMPETITOR NEGATIVE REVIEWS -->
+    <section class="rr-section" id="sec-reviews">
+      <div class="rr-section-head">
+        <h2>Competitor negative reviews</h2>
+        <span class="rr-note">Harvested read-only from each product's own reviews page (<strong>&le;2&#9733; by design</strong>). Your brands are never harvested.</span>
+        <button class="rr-btn" id="btn-export-reviews" type="button">Export reviews CSV</button>
+      </div>
+
+      <div class="rr-rev-toolbar">
+        <label class="rr-field">
+          <span>Brand</span>
+          <select id="filter-rev-brand"><option value="all">All competitors</option></select>
+        </label>
+      </div>
+
+      <div class="rr-rev-summary" id="rev-summary"></div>
+      <div class="rr-rev-list" id="rev-list"></div>
+    </section>
+
+    <!-- SECTION 4 — ACTIVITY LOG -->
+    <section class="rr-section" id="sec-log">
+      <div class="rr-section-head"><h2>Activity Log</h2></div>
+      <div class="rr-log" id="log"></div>
+    </section>
+  </main>
+
+  <div class="rr-toast-wrap" id="toast-wrap" aria-live="polite"></div>
+
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/storage.js"></script>
+  <script src="../lib/match.js"></script>
+  <script src="../lib/csv.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

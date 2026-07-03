@@ -1,0 +1,294 @@
+/*
+ * Rivalry Radar — settings page. Consumes the v2 design system (theme.css).
+ * theme.css is imported BEFORE this file so var(--rr-*) tokens resolve here.
+ * No hardcoded hex — all surfaces/text/lines/accent come from the tokens.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--rr-bg-0);
+  color: var(--rr-text-1);
+  font-family: var(--rr-font);
+  font-size: var(--rr-fs-body);
+  line-height: 1.45;
+}
+
+body {
+  background:
+    radial-gradient(900px 500px at 50% -120px, var(--rr-you-weak), transparent 60%),
+    var(--rr-bg-0);
+  min-height: 100vh;
+  padding: var(--rr-sp-8) var(--rr-sp-5) 64px;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---- header ---- */
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: var(--rr-sp-5);
+}
+.logo { display: block; flex: none; }
+.head-txt h1 {
+  margin: 0;
+  font-size: var(--rr-fs-h1);
+  font-weight: var(--rr-fw-bold);
+  letter-spacing: 0.2px;
+}
+.head-txt .sub {
+  margin: 2px 0 0;
+  color: var(--rr-text-2);
+  font-size: var(--rr-fs-sm);
+}
+
+/* ---- banner (read-only ethics) ---- */
+.banner {
+  display: flex;
+  gap: var(--rr-sp-3);
+  align-items: flex-start;
+  background: linear-gradient(180deg, var(--rr-you-weak), transparent);
+  border: 1px solid var(--rr-you-line);
+  border-left: 4px solid var(--rr-you);
+  border-radius: var(--rr-r-md);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+.banner-ico { font-size: 18px; line-height: 1.3; flex: none; }
+.banner p {
+  margin: 0;
+  font-size: var(--rr-fs-body);
+  color: var(--rr-text-1);
+}
+.banner strong { color: var(--rr-you); font-weight: var(--rr-fw-bold); }
+
+/* ---- card ---- */
+.card {
+  background: var(--rr-surface-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-md);
+  padding: 22px;
+  box-shadow: var(--rr-e-2);
+}
+
+.field { margin-bottom: var(--rr-sp-5); }
+.field:last-of-type { margin-bottom: 0; }
+
+label, .label-as {
+  display: block;
+  font-weight: var(--rr-fw-bold);
+  font-size: var(--rr-fs-h3);
+  color: var(--rr-text-1);
+  margin-bottom: 3px;
+}
+.hint {
+  margin: 0 0 var(--rr-sp-2);
+  font-size: var(--rr-fs-sm);
+  color: var(--rr-text-3);
+}
+
+/* header row for a field with an inline action (e.g. Upload sheet) */
+.field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rr-sp-3);
+  margin-bottom: 3px;
+}
+.field-head label { margin-bottom: 0; }
+.field-head-actions { display: inline-flex; gap: var(--rr-sp-2); flex: none; }
+.btn-sm { padding: 5px 12px; font-size: var(--rr-fs-sm); }
+
+textarea, input[type="number"] {
+  width: 100%;
+  background: var(--rr-bg-1);
+  color: var(--rr-text-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-sm);
+  padding: 10px 12px;
+  font-family: var(--rr-font);
+  font-size: var(--rr-fs-body);
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color var(--rr-dur-fast) var(--rr-ease), box-shadow var(--rr-dur-fast) var(--rr-ease);
+}
+textarea { min-height: 64px; }
+textarea::placeholder, input::placeholder { color: var(--rr-text-3); }
+
+textarea:focus, input[type="number"]:focus {
+  outline: none;
+  border-color: var(--rr-accent);
+  box-shadow: 0 0 0 3px var(--rr-accent-weak);
+}
+
+.ta-mine { border-left: 3px solid var(--rr-you); }
+.ta-mine:focus { border-color: var(--rr-you); box-shadow: 0 0 0 3px var(--rr-you-weak); }
+.ta-exc { border-left: 3px solid var(--rr-neutral); }
+
+.kwcount {
+  display: inline-block;
+  margin-top: 7px;
+  font-size: var(--rr-fs-sm);
+  font-weight: var(--rr-fw-bold);
+  color: var(--rr-you);
+}
+
+/* ---- checkboxes ---- */
+.checks { display: flex; gap: 14px; flex-wrap: wrap; }
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: var(--rr-fw-medium);
+  font-size: var(--rr-fs-h3);
+  margin: 0;
+  padding: 9px 14px;
+  background: var(--rr-bg-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.check span { color: var(--rr-text-1); }
+.check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1.5px solid var(--rr-neutral);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  flex: none;
+}
+.check input[type="checkbox"]:checked {
+  background: var(--rr-you);
+  border-color: var(--rr-you);
+}
+.check input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--rr-text-inverse);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+.check input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--rr-accent);
+  outline-offset: 2px;
+}
+
+.check-block { display: flex; width: 100%; }
+
+/* ---- section separator ---- */
+.section-sep {
+  height: 1px;
+  background: var(--rr-line);
+  border: 0;
+  margin: var(--rr-sp-6) 0 22px;
+}
+
+/* ---- two-col grid ---- */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.grid2 .field { margin-bottom: 0; }
+
+/* ---- error ---- */
+.err {
+  margin-top: var(--rr-sp-4);
+  padding: 10px 14px;
+  background: var(--rr-rival-weak);
+  border: 1px solid rgba(255, 90, 95, 0.45);
+  border-radius: var(--rr-r-sm);
+  color: var(--rr-danger);
+  font-size: var(--rr-fs-body);
+}
+
+/* ---- actions (buttons use the .rr-btn design-system look) ---- */
+.actions {
+  display: flex;
+  gap: var(--rr-sp-3);
+  flex-wrap: wrap;
+  margin-top: var(--rr-sp-6);
+  padding-top: var(--rr-sp-5);
+  border-top: 1px solid var(--rr-line);
+}
+.btn {
+  appearance: none;
+  cursor: pointer;
+  font: var(--rr-fw-bold) var(--rr-fs-h3) var(--rr-font);
+  padding: 9px 16px;
+  border-radius: var(--rr-r-sm);
+  border: 1px solid transparent;
+  transition: background var(--rr-dur-fast) var(--rr-ease), border-color var(--rr-dur-fast) var(--rr-ease), color var(--rr-dur-fast) var(--rr-ease), transform var(--rr-dur-fast) var(--rr-ease);
+}
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--rr-accent); outline-offset: 2px; }
+
+.btn-primary {
+  background: var(--rr-accent);
+  color: #fff;
+  margin-right: auto;
+}
+.btn-primary:hover { background: var(--rr-accent-hover); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--rr-text-2);
+  border-color: var(--rr-line-strong);
+}
+.btn-ghost:hover { color: var(--rr-text-1); background: var(--rr-surface-2); }
+
+/* ---- footer ---- */
+.foot {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--rr-text-3);
+  font-size: var(--rr-fs-micro);
+}
+
+/* ---- toast ---- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--rr-surface-2);
+  color: var(--rr-text-1);
+  border: 1px solid var(--rr-accent);
+  border-radius: var(--rr-r-sm);
+  padding: 11px 20px;
+  font-size: var(--rr-fs-body);
+  font-weight: var(--rr-fw-bold);
+  box-shadow: var(--rr-e-3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--rr-dur) var(--rr-ease), transform var(--rr-dur) var(--rr-ease);
+  z-index: 50;
+}
+.toast[data-show="1"] {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.toast.toast-err { border-color: var(--rr-danger); color: var(--rr-danger); }
+
+@media (max-width: 560px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .btn-primary { margin-right: 0; width: 100%; }
+  .actions .btn { flex: 1; }
+}

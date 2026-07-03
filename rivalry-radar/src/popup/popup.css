@@ -1,0 +1,261 @@
+/*
+ * Rivalry Radar — popup. Consumes the v2 design system (theme.css), which is
+ * imported BEFORE this file so var(--rr-*) tokens resolve here. No hardcoded hex.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 340px;
+  font-family: var(--rr-font);
+  color: var(--rr-text-1);
+  background: linear-gradient(160deg, var(--rr-bg-0) 0%, var(--rr-surface-2) 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  padding: var(--rr-sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Header */
+.hd {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.hd-logo {
+  flex: 0 0 auto;
+  border-radius: 6px;
+  display: block;
+}
+.hd-titles {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.hd-title {
+  margin: 0;
+  font-size: var(--rr-fs-h2);
+  font-weight: var(--rr-fw-bold);
+  letter-spacing: 0.2px;
+  line-height: 1.1;
+}
+.hd-badge {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: var(--rr-you);
+  background: var(--rr-you-weak);
+  border: 1px solid var(--rr-you-line);
+  border-radius: var(--rr-r-pill);
+  padding: 1px 7px;
+  white-space: nowrap;
+}
+
+/* Status pill */
+.pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--rr-fs-micro);
+  font-weight: var(--rr-fw-bold);
+  padding: 4px 9px;
+  border-radius: var(--rr-r-pill);
+  border: 1px solid var(--rr-line);
+}
+.pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.pill-on {
+  color: var(--rr-success);
+  background: rgba(52, 211, 153, 0.12);
+  border-color: rgba(52, 211, 153, 0.3);
+}
+.pill-on .pill-dot {
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+  animation: pulse 1.8s infinite;
+}
+.pill-off {
+  color: var(--rr-text-3);
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5); }
+  70% { box-shadow: 0 0 0 5px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+/* Now scanning */
+.now {
+  background: var(--rr-surface-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-md);
+  padding: 10px;
+}
+.now-line {
+  font-size: var(--rr-fs-sm);
+  margin-bottom: 9px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.now-market {
+  font-weight: var(--rr-fw-bold);
+  color: var(--rr-you);
+  text-transform: capitalize;
+}
+.now-sep { color: var(--rr-text-3); }
+.now-keyword {
+  color: var(--rr-text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.now-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--rr-sp-2);
+}
+.stat {
+  background: var(--rr-bg-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-sm);
+  padding: 7px 8px;
+  text-align: center;
+}
+.stat-k {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--rr-text-3);
+  margin-bottom: 3px;
+}
+.stat-v {
+  font-size: var(--rr-fs-h3);
+  font-weight: var(--rr-fw-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--rr-text-1);
+}
+
+/* Competitor ads */
+.comp {
+  background: var(--rr-surface-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-md);
+  padding: 10px;
+}
+.comp-head {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--rr-text-3);
+  margin-bottom: var(--rr-sp-2);
+}
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--rr-sp-2);
+}
+.comp-card {
+  border-radius: var(--rr-r-sm);
+  padding: 8px 9px;
+  border: 1px solid var(--rr-line);
+  background: var(--rr-bg-1);
+  position: relative;
+}
+.comp-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--rr-neutral);
+}
+.comp-amazon::before { background: var(--rr-you); }
+.comp-flipkart::before { background: var(--rr-rival); }
+.comp-name {
+  font-size: var(--rr-fs-micro);
+  font-weight: var(--rr-fw-bold);
+  color: var(--rr-text-2);
+  padding-left: 7px;
+}
+.comp-count {
+  font-size: 22px;
+  font-weight: var(--rr-fw-bold);
+  line-height: 1.1;
+  padding-left: 7px;
+  font-variant-numeric: tabular-nums;
+}
+.comp-amazon .comp-count { color: var(--rr-you); }
+.comp-flipkart .comp-count { color: var(--rr-rival); }
+.comp-meta {
+  font-size: 9.5px;
+  color: var(--rr-text-3);
+  padding-left: 7px;
+}
+
+/* Buttons */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--rr-sp-2);
+}
+.actions-sub { margin-top: -2px; }
+.btn {
+  appearance: none;
+  border: 1px solid var(--rr-line-strong);
+  background: var(--rr-surface-2);
+  color: var(--rr-text-1);
+  font-size: var(--rr-fs-sm);
+  font-weight: var(--rr-fw-bold);
+  padding: 9px 10px;
+  border-radius: var(--rr-r-sm);
+  cursor: pointer;
+  transition: background var(--rr-dur-fast) var(--rr-ease), border-color var(--rr-dur-fast) var(--rr-ease), color var(--rr-dur-fast) var(--rr-ease), opacity var(--rr-dur-fast) var(--rr-ease);
+  font-family: inherit;
+}
+.btn:hover { background: var(--rr-surface-3); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btn:focus-visible { outline: 2px solid var(--rr-accent); outline-offset: 2px; }
+.btn-primary {
+  background: var(--rr-accent);
+  border-color: var(--rr-accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--rr-accent-hover); }
+.btn-primary.is-running {
+  background: var(--rr-rival-weak);
+  border-color: rgba(255, 90, 95, 0.4);
+  color: var(--rr-rival);
+}
+.btn-primary.is-running:hover { background: rgba(255, 90, 95, 0.22); }
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--rr-text-2);
+}
+.btn-ghost:hover { color: var(--rr-text-1); background: var(--rr-surface-2); }
+
+/* Footer */
+.ft {
+  font-size: var(--rr-fs-micro);
+  color: var(--rr-text-3);
+  text-align: center;
+  min-height: 13px;
+  line-height: 1.3;
+}

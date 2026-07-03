@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Rivalry Radar - Ad Intelligence",
+  "version": "1.2.0",
+  "description": "Read-only competitor ad intelligence for Amazon.in & Flipkart. Tracks sponsored placements, prices, ranks and share-of-voice all day. Never clicks ads.",
+  "permissions": ["storage", "unlimitedStorage", "tabs", "alarms"],
+  "host_permissions": [
+    "https://www.amazon.in/*",
+    "https://www.flipkart.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Rivalry Radar",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "src/options/options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.amazon.in/*"],
+      "js": ["src/lib/constants.js", "src/content/scrape-common.js", "src/content/amazon.js", "src/content/amazon-reviews.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.flipkart.com/*"],
+      "js": ["src/lib/constants.js", "src/content/scrape-common.js", "src/content/flipkart.js", "src/content/flipkart-reviews.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

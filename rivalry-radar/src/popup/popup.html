@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rivalry Radar</title>
+  <link rel="stylesheet" href="../lib/theme.css" />
+  <link rel="stylesheet" href="popup.css" />
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/storage.js"></script>
+  <script src="popup.js" defer></script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hd">
+      <img class="hd-logo" src="../../icons/icon48.png" alt="Rivalry Radar logo" width="28" height="28" />
+      <div class="hd-titles">
+        <h1 class="hd-title">Rivalry Radar</h1>
+        <span class="hd-badge" title="This tool only reads the page. It never clicks ads.">🔒 Read-only · never clicks ads</span>
+      </div>
+      <span id="statusPill" class="pill pill-off" role="status" aria-live="polite">
+        <span class="pill-dot"></span><span id="statusText">Stopped</span>
+      </span>
+    </header>
+
+    <section class="now">
+      <div class="now-line">
+        <span id="nowMarket" class="now-market">—</span>
+        <span class="now-sep">·</span>
+        <span id="nowKeyword" class="now-keyword">idle</span>
+      </div>
+      <div class="now-grid">
+        <div class="stat">
+          <div class="stat-k">Scans</div>
+          <div id="scanCount" class="stat-v">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">Last scan</div>
+          <div id="lastScan" class="stat-v">—</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">Next scan</div>
+          <div id="countdown" class="stat-v">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="comp">
+      <div class="comp-head">Latest competitor ads</div>
+      <div class="comp-grid">
+        <div class="comp-card comp-amazon">
+          <div class="comp-name">Amazon</div>
+          <div id="compAmazon" class="comp-count">—</div>
+          <div id="compAmazonMeta" class="comp-meta">no data</div>
+        </div>
+        <div class="comp-card comp-flipkart">
+          <div class="comp-name">Flipkart</div>
+          <div id="compFlipkart" class="comp-count">—</div>
+          <div id="compFlipkartMeta" class="comp-meta">no data</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button id="toggleBtn" class="btn btn-primary" type="button">Start</button>
+      <button id="scanNowBtn" class="btn" type="button">Scan now</button>
+    </section>
+    <section class="actions actions-sub">
+      <button id="dashBtn" class="btn btn-ghost" type="button">Open dashboard</button>
+      <button id="settingsBtn" class="btn btn-ghost" type="button">Settings</button>
+    </section>
+
+    <footer class="ft">
+      <span id="footNote">Idle — press Start to begin scanning.</span>
+    </footer>
+  </div>
+</body>
+</html>

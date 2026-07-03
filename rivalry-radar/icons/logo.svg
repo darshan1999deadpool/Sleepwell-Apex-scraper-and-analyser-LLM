@@ -1,0 +1,23 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rivalry Radar logo">
+  <defs>
+    <linearGradient id="navyV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#14334f"/>
+      <stop offset="1" stop-color="#081829"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="13" y="13" width="486" height="486" rx="109" fill="url(#navyV)"/>
+  <rect x="16" y="16" width="480" height="480" rx="106" fill="none" stroke="#22D3C5" stroke-opacity="0.18" stroke-width="3"/>
+
+  <g fill="none" stroke="#22D3C5" stroke-opacity="0.30" stroke-width="8">
+    <path d="M185.6 416 A89.6 89.6 0 0 0 96 326.4"/>
+    <path d="M256 416 A160 160 0 0 0 96 256"/>
+    <path d="M326.4 416 A230.4 230.4 0 0 0 96 185.6"/>
+  </g>
+  <circle cx="96" cy="416" r="17.6" fill="#22D3C5"/>
+
+  <rect x="268.8" y="313.6" width="44.8" height="96"  rx="10" fill="#22D3C5" fill-opacity="0.85"/>
+  <rect x="332.8" y="256"   width="44.8" height="153.6" rx="10" fill="#22D3C5" fill-opacity="0.85"/>
+  <rect x="396.8" y="185.6" width="44.8" height="224" rx="10" fill="#FF4D4F"/>
+  <circle cx="419.2" cy="153.6" r="16" fill="#FF4D4F"/>
+</svg>

@@ -1,0 +1,166 @@
+/*
+ * Rivalry Radar — Design System v2 ("Radar" theme).
+ * Single source of visual truth: import this BEFORE each page's own stylesheet
+ * (<link rel="stylesheet" href="../lib/theme.css">) and reference the tokens via
+ * var(--rr-*). Dark, precise, analytics-grade. No hardcoded hex in page CSS —
+ * use these tokens so the whole tool stays consistent.
+ */
+:root {
+  /* ---- elevation / surfaces (dark) ---- */
+  --rr-bg-0: #091624;        /* app canvas (deepest) */
+  --rr-bg-1: #0d1f31;        /* sunken wells, chart plots */
+  --rr-surface-1: #12283f;   /* cards */
+  --rr-surface-2: #17324b;   /* raised cards / header */
+  --rr-surface-3: #1e3d5a;   /* popovers / hover */
+  --rr-line: #223f5b;        /* hairline borders */
+  --rr-line-strong: #2f5678; /* emphasized dividers */
+
+  /* ---- text ---- */
+  --rr-text-1: #eaf2fb;      /* primary */
+  --rr-text-2: #a7c0d8;      /* secondary */
+  --rr-text-3: #6f8cab;      /* muted / captions */
+  --rr-text-inverse: #06202b;/* text on bright fills */
+
+  /* ---- brand roles ---- */
+  --rr-you: #2dd4bf;         /* YOUR brand (teal) */
+  --rr-you-weak: rgba(45, 212, 191, 0.16);
+  --rr-you-line: rgba(45, 212, 191, 0.55);
+  --rr-rival: #ff5a5f;       /* competitors (red) */
+  --rr-rival-weak: rgba(255, 90, 95, 0.16);
+  --rr-neutral: #8aa6c4;     /* other / unknown */
+
+  /* ---- interactive accent (buttons, links, active) ---- */
+  --rr-accent: #4c8dff;
+  --rr-accent-weak: rgba(76, 141, 255, 0.16);
+  --rr-accent-hover: #6ba0ff;
+
+  /* ---- semantic ---- */
+  --rr-success: #34d399;
+  --rr-warning: #f5a524;
+  --rr-danger: #ff5a5f;
+
+  /* ---- SoV bifurcation encoding (organic vs sponsored vs overall) ---- */
+  --rr-sponsored: #f5a524;   /* ads = amber/gold */
+  --rr-sponsored-weak: rgba(245, 165, 36, 0.16);
+  --rr-organic: #5aa9ff;     /* organic = blue */
+  --rr-organic-weak: rgba(90, 169, 255, 0.16);
+  --rr-overall: #9db7d2;     /* overall = neutral */
+
+  /* ---- categorical palette for multi-brand series (index 0 = a competitor) ---- */
+  --rr-cat-1: #ff5a5f;
+  --rr-cat-2: #f5a524;
+  --rr-cat-3: #a78bfa;
+  --rr-cat-4: #38bdf8;
+  --rr-cat-5: #f472b6;
+  --rr-cat-6: #34d399;
+  --rr-cat-7: #fb923c;
+  --rr-cat-8: #c084fc;
+
+  /* ---- typography ---- */
+  --rr-font: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  --rr-font-mono: "SF Mono", "Cascadia Mono", Consolas, "Roboto Mono", monospace;
+  --rr-fs-display: 26px; --rr-fs-h1: 20px; --rr-fs-h2: 16px; --rr-fs-h3: 14px;
+  --rr-fs-body: 13.5px; --rr-fs-sm: 12px; --rr-fs-micro: 11px;
+  --rr-fw-regular: 400; --rr-fw-medium: 500; --rr-fw-bold: 600;
+
+  /* ---- spacing scale ---- */
+  --rr-sp-1: 4px; --rr-sp-2: 8px; --rr-sp-3: 12px; --rr-sp-4: 16px;
+  --rr-sp-5: 20px; --rr-sp-6: 24px; --rr-sp-7: 32px; --rr-sp-8: 40px;
+
+  /* ---- radius ---- */
+  --rr-r-sm: 8px; --rr-r-md: 12px; --rr-r-lg: 16px; --rr-r-pill: 999px;
+
+  /* ---- elevation shadows (subtle on dark) ---- */
+  --rr-e-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --rr-e-2: 0 6px 18px rgba(0, 0, 0, 0.38);
+  --rr-e-3: 0 14px 44px rgba(0, 0, 0, 0.46);
+
+  /* ---- motion ---- */
+  --rr-dur-fast: 120ms; --rr-dur: 200ms;
+  --rr-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------------- base component primitives (opt-in classes) ---------------- */
+
+.rr-card {
+  background: var(--rr-surface-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-md);
+  box-shadow: var(--rr-e-1);
+}
+
+.rr-kpi {
+  background: var(--rr-bg-1);
+  border: 1px solid var(--rr-line);
+  border-radius: var(--rr-r-md);
+  padding: var(--rr-sp-4) var(--rr-sp-5);
+}
+.rr-kpi .rr-kpi-label {
+  font-size: var(--rr-fs-micro); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--rr-text-3); font-weight: var(--rr-fw-medium);
+}
+.rr-kpi .rr-kpi-value {
+  font-size: var(--rr-fs-display); font-weight: var(--rr-fw-bold);
+  color: var(--rr-text-1); font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+
+/* segmented control (used for the SoV mode toggle: Sponsored / Organic / Overall) */
+.rr-seg {
+  display: inline-flex; gap: 2px; padding: 3px;
+  background: var(--rr-bg-1); border: 1px solid var(--rr-line); border-radius: var(--rr-r-pill);
+}
+.rr-seg button {
+  appearance: none; border: 0; cursor: pointer;
+  background: transparent; color: var(--rr-text-2);
+  font: var(--rr-fw-medium) var(--rr-fs-sm) var(--rr-font);
+  padding: 5px 12px; border-radius: var(--rr-r-pill);
+  transition: background var(--rr-dur-fast) var(--rr-ease), color var(--rr-dur-fast) var(--rr-ease);
+}
+.rr-seg button:hover { color: var(--rr-text-1); }
+.rr-seg button[aria-pressed="true"] { background: var(--rr-accent); color: #fff; }
+
+/* buttons */
+.rr-btn {
+  appearance: none; cursor: pointer; font: var(--rr-fw-bold) var(--rr-fs-h3) var(--rr-font);
+  padding: 9px 16px; border-radius: var(--rr-r-sm); border: 1px solid transparent;
+  transition: background var(--rr-dur-fast) var(--rr-ease), border-color var(--rr-dur-fast) var(--rr-ease), transform var(--rr-dur-fast) var(--rr-ease);
+}
+.rr-btn:active { transform: translateY(1px); }
+.rr-btn-primary { background: var(--rr-accent); color: #fff; }
+.rr-btn-primary:hover { background: var(--rr-accent-hover); }
+.rr-btn-ghost { background: transparent; color: var(--rr-text-2); border-color: var(--rr-line-strong); }
+.rr-btn-ghost:hover { color: var(--rr-text-1); background: var(--rr-surface-2); }
+.rr-btn-danger { background: transparent; color: var(--rr-danger); border-color: rgba(255, 90, 95, 0.5); }
+.rr-btn-danger:hover { background: var(--rr-rival-weak); }
+.rr-btn:focus-visible { outline: 2px solid var(--rr-accent); outline-offset: 2px; }
+
+/* badges */
+.rr-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--rr-fs-micro); font-weight: var(--rr-fw-bold); letter-spacing: 0.04em;
+  padding: 2px 8px; border-radius: var(--rr-r-pill); text-transform: uppercase;
+}
+.rr-badge-ad { background: var(--rr-sponsored-weak); color: var(--rr-sponsored); }
+.rr-badge-organic { background: var(--rr-organic-weak); color: var(--rr-organic); }
+.rr-badge-you { background: var(--rr-you-weak); color: var(--rr-you); }
+
+/* data table */
+.rr-table { width: 100%; border-collapse: collapse; font-size: var(--rr-fs-sm); }
+.rr-table th {
+  text-align: left; font-weight: var(--rr-fw-medium); color: var(--rr-text-3);
+  font-size: var(--rr-fs-micro); letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 8px 10px; border-bottom: 1px solid var(--rr-line);
+}
+.rr-table td {
+  padding: 9px 10px; border-bottom: 1px solid var(--rr-line);
+  color: var(--rr-text-1); font-variant-numeric: tabular-nums;
+}
+.rr-table tr:last-child td { border-bottom: 0; }
+
+/* focus ring for any interactive element */
+.rr-focus:focus-visible { outline: 2px solid var(--rr-accent); outline-offset: 2px; }
+
+/* thin scrollbars inside dark panels */
+.rr-scroll { scrollbar-width: thin; scrollbar-color: var(--rr-line-strong) transparent; }
+.rr-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.rr-scroll::-webkit-scrollbar-thumb { background: var(--rr-line-strong); border-radius: var(--rr-r-pill); }
